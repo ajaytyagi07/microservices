@@ -69,6 +69,25 @@ Handles:
 
 ---
 
+## 📚 API Documentation (Swagger)
+
+Swagger UI is integrated for API testing and documentation.
+
+Once the services are running, you can access:
+
+Auth Service Swagger:
+http://localhost:5001/swagger-ui.html
+
+Product Service Swagger:
+http://localhost:5002/swagger-ui.html
+
+You can:
+- View all available endpoints
+- Test APIs directly from the browser
+- Provide JWT token in Authorization header
+
+---
+
 ## 🛠 Technologies Used
 
 - Java 21
