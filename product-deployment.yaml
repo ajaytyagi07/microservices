@@ -26,7 +26,7 @@ spec:
             - name: SPRING_DATASOURCE_PASSWORD
               value: root
             - name: JWT_SECRET
-              value: yashpatel9830584330338258433033825yashpatel
+              value: ajay9830584330338258433033825ajay
             - name: JWT_EXPIRATION
               value: "3600000"
 ---
