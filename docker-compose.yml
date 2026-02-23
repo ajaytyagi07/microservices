@@ -1,0 +1,82 @@
+version: "3.9"
+
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    networks:
+      - micro-net
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  auth-service:
+    build: ./auth
+    container_name: auth-service
+    restart: always
+    environment:
+      SERVER_PORT: 5001
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/authdb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      JWT_SECRET: yashpatel9830584330338258433033825yashpatel
+      JWT_EXPIRATION: 3600000
+    ports:
+      - "5001:5001"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - micro-net
+
+  product-service:
+    build: ./product
+    container_name: product-service
+    restart: always
+    environment:
+      SERVER_PORT: 5002
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/productdb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      JWT_SECRET: yashpatel9830584330338258433033825yashpatel
+      JWT_EXPIRATION: 3600000
+    ports:
+      - "5002:5002"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - micro-net
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    restart: always
+    environment:
+      SERVER_PORT: 5000
+      JWT_SECRET: yashpatel9830584330338258433033825yashpatel
+    ports:
+      - "5000:5000"
+    depends_on:
+      - auth-service
+      - product-service
+    networks:
+      - micro-net
+
+networks:
+  micro-net:
+    driver: bridge
+
+volumes:
+  mysql-data:
