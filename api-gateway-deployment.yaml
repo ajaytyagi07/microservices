@@ -20,7 +20,7 @@ spec:
             - containerPort: 5000
           env:
             - name: JWT_SECRET
-              value: yashpatel9830584330338258433033825yashpatel
+              value: ajay9830584330338258433033825ajay
             - name: JWT_EXPIRATION
               value: "3600000"
 ---
